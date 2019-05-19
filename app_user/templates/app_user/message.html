@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="border rounded text-center p-2 bg-light">{{ user.first_name }} 님의 메시지</div>
+<div class="border rounded p-3">
+    {% for message in message_list %}
+            <div class="input-group my-3">
+                <span class="form-control bg-light">todo list의 <a href="{% url 'app_todo:detail' message.get_todo.id %}">{{ message.get_todo.title }}</a> 의 {{ message.content }}</span>
+            </div>
+    {% endfor %}
+</div>
+{% endblock %}

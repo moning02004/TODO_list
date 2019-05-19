@@ -1,0 +1,43 @@
+{% extends 'layout.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    <div class="my-3 d-flex">
+        <span class="h2">{{ userObj.profile.get_name }}</span>
+        <input hidden type="text" name="username" value="{{ userObj.username }}">
+        {% if user != userObj %}
+            {% if not userObj.profile in user.profile.friend.all %}
+                <button class="btn add-friend">친구 등록</button>
+            {% else %}
+                <button class="btn release-friend">친구 해제</button>
+            {% endif %}
+        {% endif %}
+        <button class="btn ml-auto" onclick="window.history.back();">이전으로</button>
+    </div>
+
+
+    <div class="border rounded p-3">
+        <div class="p-3 row">
+            <span class="d-block col-lg-4 border rounded text-center py-2 bg-light">이름</span>
+            <span class="d-block col-lg-8 border rounded text-center py-2">{{ userObj.profile.get_name }}</span>
+        </div>
+        <div class="p-3 row">
+            <span class="d-block col-lg-4 border rounded text-center py-2 bg-light">주소</span>
+            <span class="d-block col-lg-8 border rounded text-center py-2">{{ userObj.profile.address }}</span>
+        </div>
+        <div class="p-3 row">
+            <span class="d-block col-lg-4 border rounded text-center py-2 bg-light">생년월일</span>
+            <span class="d-block col-lg-8 border rounded text-center py-2">{{ userObj.profile.birth|date:'Y. m. d' }}</span>
+        </div>
+        <div class="p-3 row">
+            <span class="d-block col-lg-4 border rounded text-center py-2 bg-light">친구</span>
+            <a href="{% url 'app_friend:index' userObj.username %}" class="d-block col-lg-8 border rounded text-center py-2">{{ userObj.profile.friend.all | length }} 명</a>
+        </div>
+    </div>
+    {% if user == userObj %}
+    <div class="d-flex mt-2">
+        <a href="{% url 'app_user:edit' %}" class="btn border rounded">회원 수정</a>
+        <a href="" class="btn border rounded ml-auto">회원 탈퇴</a>
+    </div>
+    {% endif %}
+{% endblock %}

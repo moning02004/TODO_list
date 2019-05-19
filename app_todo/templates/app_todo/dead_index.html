@@ -1,0 +1,20 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="d-flex">
+        <span class="d-block h2 my-3">{{ headline }}</span>
+    </div>
+    {% if not todo_list %}
+        <p>리스트가 없습니다.</p>
+    {% endif %}
+    {% for todo in todo_list|dictsort:'id' %}
+        <div class="input-group form-group">
+            <span class="input-group-text">{{ forloop.counter }}</span>
+            <a href="{% url 'app_todo:detail' todo.id %}" class="form-control d-flex link">
+                <span class="">{{ todo.title }}</span>
+                <span class="ml-auto">{{ todo.deadline|date:'Y년 m월 d일까지' }}</span>
+            </a>
+            <button class="btn bg-delete border delete-todo" value="{{ todo.id }}"><i class="fa fa-times"></i></button>
+        </div>
+    {% endfor %}
+{% endblock %}

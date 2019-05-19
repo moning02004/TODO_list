@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="d-flex">
+        <span class="d-block h2 my-3">진행 중인 목록</span>
+        {% if todo_list %}
+            <button class="btn ml-auto my-auto bg-light" name="edit-button">수정</button>
+        {% endif %}
+    </div>
+    {% if not todo_list %}
+        <p>작성된 리스트가 없습니다.</p>
+    {% endif %}
+    {% for todo in todo_list|dictsort:'priority' %}
+        <div class="input-group form-group">
+            {% if todo.deadline != None and today > todo.deadline|date:'Y.m.d' %}
+            <span class="input-group-text" style="background-color: rgba(255,0,0,0.7); color: white;"><i class="fa fa-exclamation"></i>{{ todo.priority }}</span>
+            {% else %}
+                <span class="input-group-text">{{ todo.priority }}</span>
+            {% endif %}
+            <a href="{% url 'app_todo:detail' todo.id %}" class="form-control d-flex link">
+                <span class="">{{ todo.title }}</span>
+                <span class="ml-auto">{{ todo.deadline|date:'Y년 m월 d일까지' }}</span>
+            </a>
+            <div class="input-group-append edit-field" hidden>
+                <button class="btn bg-white border pri" name="up" value="{{ todo.id }}"><i class="fa fa-arrow-up"></i></button>
+                <button class="btn bg-white border pri" name="down" value="{{ todo.id }}"><i class="fa fa-arrow-down"></i></button>
+                <button class="btn bg-delete border delete-todo" value="{{ todo.id }}"><i class="fa fa-times"></i></button>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
