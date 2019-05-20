@@ -10,7 +10,7 @@ import datetime
 def index(request):
     today = datetime.datetime.now().strftime('%Y-%m-%d')
     todo_list = request.user.todo_set.all().filter(isFinish='no')
-    dead_list = request.user.todo_set.all().filter(Q(isFinish='no') & Q(deadline__lt=today) | Q(deadline__isnull=False))
+    dead_list = request.user.todo_set.all().filter(Q(isFinish='no') & Q(deadline__lt=today) and Q(deadline__isnull=False))
     for todo in dead_list:
         if not str(todo.id) in [y.target for y in request.user.messagebox.message_set.all().filter(target=str(todo.id))]:
             message = Message()
