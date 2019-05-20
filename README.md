@@ -7,7 +7,7 @@
 4. git clone https://github.com/moning02004/TODO_list
 5. cd TODO_list
 6. pip3 install django
-7. sudo apt_get install nginx
+7. sudo apt-get install nginx
 7. pip3 install uwsgi
 
 
