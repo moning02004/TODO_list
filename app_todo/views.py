@@ -49,7 +49,7 @@ def edit(request, pk):
         try:
             todo.title = request.POST.get('title')
             todo.content = request.POST.get('content')
-            todo.deadline = request.POST.get('deadline')
+            todo.deadline = request.POST.get('deadline') if request.POST.get('deadline') != '' else None
             todo.save()
             return redirect('app_todo:detail', todo.id)
         except:
@@ -63,8 +63,7 @@ def new(request):
         todo.author = request.user
         todo.title = request.POST.get('title')
         todo.content = str(request.POST.get('content')).strip()
-        if request.POST.get('deadline') != '':
-            todo.deadline = request.POST.get('deadline')
+        todo.deadline = request.POST.get('deadline') if request.POST.get('deadline') != '' else None
         todo.priority = len(request.user.todo_set.all().filter(isFinish='no'))+1
         todo.save()
         return redirect('app_todo:index')
