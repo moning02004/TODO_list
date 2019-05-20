@@ -22,6 +22,6 @@ daemonize의 경로를 ' /home/로그인한 유저/todo.log '로 변경하고 �
 
 1. cd TODO_list (manage.py 파일이 있는 directory)
 2. cp todo.conf /etc/nginx/sites-available/ 
-3. sudo ln -s /etc/nginx/sites-available/todo.conf /etc/nginx/sites-enables/
+3. sudo ln -s /etc/nginx/sites-available/todo.conf /etc/nginx/sites-enabled/
 4. uwsgi --ini ini_todo.ini
 5. sudo /etc/init.d/nginx restart
