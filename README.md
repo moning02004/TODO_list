@@ -1,6 +1,6 @@
 # TODO_list
 
-# 설치 요소 (pip3, django)
+# 설치 요소 (pip3, django, uWSGI)
 1. sudo apt-get update
 2. sudo apt-get install git
 3. sudo apt-get install python3-pip
@@ -20,7 +20,8 @@
 아래를 진행하기 앞서 ini_todo.ini 파일을 수정해야한다.
 daemonize의 경로를 ' /home/로그인한 유저/todo.log '로 변경하고 저장한다.
 
-1. cp todo.conf /etc/nginx/sites-available/ 
-2. sudo ln -s /etc/nginx/sites-available/todo.conf /etc/nginx/sites-enables/
-3. uwsgi --ini ini_todo.ini
-4. sudo /etc/init.d/nginx restart
+1. cd TODO_list (manage.py 파일이 있는 directory)
+2. cp todo.conf /etc/nginx/sites-available/ 
+3. sudo ln -s /etc/nginx/sites-available/todo.conf /etc/nginx/sites-enables/
+4. uwsgi --ini ini_todo.ini
+5. sudo /etc/init.d/nginx restart
