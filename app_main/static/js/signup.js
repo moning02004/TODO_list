@@ -88,14 +88,4 @@ $(document).ready(function() {
             $passwordField.addClass("text-danger");
         }
     });
-
-    $('.message-window').click(function(e) {
-        var url = e.target.href;
-        window.open(url, "", "width=400, height=600, status=no,toolbar=no");
-        return false;
-    });
-
-    $('input[value="저장"]').click(function(e) {
-
-    });
 });

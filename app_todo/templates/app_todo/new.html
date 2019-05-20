@@ -2,7 +2,7 @@
 {% load staticfiles %}
 
 {% block script %}
-    <script src="{% static 'js/signup.js' %}"></script>
+    <script src="{% static 'js/new.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -21,7 +21,7 @@
                 <div class="input-group-prepend">
                     <label for="content" class="input-group-text">내용 *</label>
                 </div>
-                <textarea id="content" class="form-control" name="content" placeholder="내용을 입력하세요" style="height: 200px;"></textarea>
+                <textarea id="content" class="form-control" name="content" placeholder="내용을 입력하세요"></textarea>
             </div>
 
             <div class="accordion">
@@ -35,9 +35,9 @@
                     </div>
                 </div>
             </div>
-
         </div>
+
         <button type="submit" name="save" class="mb-2 form-control bg-light pointer-cursor">작성</button>
-        <a href="{% url 'app_main:index' %}" class="form-control text-center link">취소</a>
+        <a href="{% url 'app_main:index' %}" class="form-control text-center" id="bg-red">취소</a>
     </form>
 {% endblock %}

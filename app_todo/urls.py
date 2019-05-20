@@ -6,6 +6,7 @@ from . import views
 app_name = 'app_todo'
 urlpatterns = [
     path('continue/', views.index, name='index'),
+    path('continue/edit/', views.index_edit, name='index_edit'),
     path('detail/<int:pk>/', views.detail, name='detail'),
     path('edit/<int:pk>/', views.edit, name='edit'),
     path('new/', views.new, name='new'),

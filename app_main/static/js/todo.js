@@ -1,13 +1,11 @@
 $(document).ready(function() {
-
-    let date = new Date();
-    let month = date.getMonth() + 1;
-    let day = date.getDate();
-    if (month < 10) month = '0' + month;
-    if (day < 10) day = '0' + day;
-
     var $deadline = $('#deadline');
     $deadline.click(function() {
+        var date = new Date();
+        var month = date.getMonth() + 1;
+        var day = date.getDate();
+        if (month < 10) month = '0' + month;
+        if (day < 10) day = '0' + day;
         $deadline.attr("min", date.getFullYear()+"-"+month+"-"+day);
     });
 
@@ -19,18 +17,8 @@ $(document).ready(function() {
         return false;
     });
 
-    let $editButton = $('button[name="edit-button"]');
-    $editButton.click(function() {
-        if ($editButton.html() !== "확인") {
-            $('.edit-field').attr('hidden', false);
-            $('button[name="edit-button"]').html("확인");
-        } else {
-            $('.edit-field').attr('hidden', true);
-            $('button[name="edit-button"]').html("수정");
-        }
-    });
-
     $('.change').click(function() {
+        if(!confirm("모두 완료하였습니까?")) return false;
         let $pk = $('input[name="pk"]').val();
         $.ajax({
             url:'/todo/_finish',
@@ -42,15 +30,14 @@ $(document).ready(function() {
     });
 
     $('.delete-todo').click(function() {
-        if(confirm("취소할 수 없습니다. 삭제하시겠습니까?")) {
-            let $pk = this.value;
-            $.ajax({
-                url:'/todo/_delete/' + $pk,
-                success: function(data) {
-                    location.reload();
-                }
-            });
-        }
+        if(!confirm("취소할 수 없습니다. 삭제하시겠습니까?")) return false;
+        let $pk = this.value;
+        $.ajax({
+            url:'/todo/_delete/' + $pk,
+            success: function(data) {
+                location.reload();
+            }
+        });
     });
 
     $('.pri').click(function() {
@@ -60,6 +47,7 @@ $(document).ready(function() {
         $.ajax({
             url:'/todo/_change/'+$pk,
             data: {'arrow': arrow},
+            dataType: 'json',
             success: function(data){
                 location.reload();
             }

@@ -1,3 +1,14 @@
+#bg-red {
+    background-color: rgba(221,10,10,0.3);
+    color: white;
+}
+.form-group textarea {
+    height: 200px;
+}
+#block-wrap {
+    overflow:hidden;
+    word-wrap:break-word;
+}
 .link:hover {
     text-decoration: none;
 }
@@ -19,3 +30,4 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     top: 0;
     width: auto;
 }
+

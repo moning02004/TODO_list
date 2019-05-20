@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
@@ -7,17 +8,23 @@ import datetime
 
 
 def index(request):
+    today = datetime.datetime.now().strftime('%Y-%m-%d')
     todo_list = request.user.todo_set.all().filter(isFinish='no')
-    today = datetime.datetime.now().strftime('%Y.%m.%d')
-    for todo in [x for x in todo_list if x.deadline is not None and x.deadline.strftime('%Y.%m.%d') < today]:
+    dead_list = request.user.todo_set.all().filter(Q(isFinish='no') & Q(deadline__lt=today) | Q(deadline__isnull=False))
+    for todo in dead_list:
         if not str(todo.id) in [y.target for y in request.user.messagebox.message_set.all().filter(target=str(todo.id))]:
             message = Message()
             message.box = request.user.messagebox
             message.target = str(todo.id)
             message.content = '마감일이 지났습니다.'
             message.save()
-
     return render(request, 'app_todo/index.html', {'todo_list': todo_list, 'today': today})
+
+
+def index_edit(request):
+    todo_list = request.user.todo_set.all().filter(isFinish='no')
+    today = datetime.datetime.now().strftime('%Y.%m.%d')
+    return render(request, 'app_todo/index_edit.html', {'todo_list': todo_list, 'today': today})
 
 
 def complete_index(request):
@@ -56,7 +63,6 @@ def new(request):
         todo.author = request.user
         todo.title = request.POST.get('title')
         todo.content = str(request.POST.get('content')).strip()
-        print(request.POST.get('deadline'))
         if request.POST.get('deadline') != '':
             todo.deadline = request.POST.get('deadline')
         todo.priority = len(request.user.todo_set.all().filter(isFinish='no'))+1
@@ -66,11 +72,13 @@ def new(request):
 
 
 def delete(request, pk):
-    todo_list = request.user.todo_set.all().filter(isFinish='no', pk__gt=pk)
-    for todo in todo_list:
-        todo.priority -= 1
-        todo.save()
-    Todo.objects.get(pk=pk).delete()
+    todo_list = request.user.todo_set.all().filter(isFinish='no', priority__gt=Todo.objects.get(pk=pk).priority)
+    for x in todo_list:
+        x.priority -= 1
+        x.save()
+    todo = Todo.objects.get(pk=pk)
+    Message.objects.get(target=todo.id).delete() if Message.objects.all().filter(target=todo.id).exists() else None
+    todo.delete()
     return redirect('app_todo:index')
 
 
@@ -90,8 +98,6 @@ def changePriority(request, pk):
     try:
         if request.GET.get('arrow') == 'down':
             next = list(request.user.todo_set.all().filter(isFinish='no', priority__gt=todo.priority).order_by('priority'))[0]
-            print(list(request.user.todo_set.all().filter(isFinish='no', priority__gt=todo.priority).order_by('priority')))
-            print(next)
         else:
             next = list(request.user.todo_set.all().filter(isFinish='no', priority__lt=todo.priority).order_by('priority'))[-1]
         temp = todo.priority
@@ -102,3 +108,4 @@ def changePriority(request, pk):
     except:
         pass
     return JsonResponse({'message': 'OK'})
+
