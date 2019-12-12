@@ -33,17 +33,17 @@
 
 
 ## 실행 화면
-<img src="/img/todo_register.PNG" width="50%" alt="RubberDuck"></img><br/>
-<img src="/img/todo_login.PNG" width="50%" alt="RubberDuck"></img><br/>
-<img src="/img/main.png" width="50%" alt="RubberDuck"></img><br/>
-<img src="/img/new.PNG" width="50%" alt="RubberDuck"></img><br/>
-<img src="/img/main_after.PNG" width="50%" alt="RubberDuck"></img><br/>
-<img src="/img/detail.PNG" width="50%" alt="RubberDuck"></img><br/>
-<img src="/img/detail_complete.PNG" width="50%" alt="RubberDuck"></img><br/>
-<img src="/img/complete_list.PNG" width="50%" alt="RubberDuck"></img><br/>
+<img src="/img/todo_register.PNG" width="70%"></img><br/>
+<img src="/img/todo_login.PNG" width="70%" ></img><br/>
+<img src="/img/main.PNG" width="70%"></img><br/>
+<img src="/img/new.PNG" width="70%"></img><br/>
+<img src="/img/main_after.PNG" width="70%"></img><br/>
+<img src="/img/detail.PNG" width="70%"></img><br/>
+<img src="/img/detail_complete.PNG" width="70%"></img><br/>
+<img src="/img/complete_list.PNG" width="70%"></img><br/>
 
 서울이라는 todo 리스트를 생성시키고 오늘을 마감일로 지정하면 다음과 같이 "오늘 마감인 목록"에 표시됩니다.
-<img src="/img/today_list.PNG" width="50%" alt="RubberDuck"></img><br/>
+<img src="/img/today_list.PNG" width="70%"></img><br/>
 
 
 
