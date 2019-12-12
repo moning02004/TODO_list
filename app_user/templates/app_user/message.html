@@ -5,7 +5,7 @@
 <div class="border rounded p-3">
     {% for message in message_list %}
             <div class="input-group my-3">
-                <span class="form-control bg-light">todo list의 <a href="{% url 'app_todo:detail' message.get_todo.id %}">{{ message.get_todo.title }}</a> 의 {{ message.content }}</span>
+                <span class="form-control bg-light">todo list의 <a href="{% url 'app_todo:detail' message.get_todo.id %}">{{ message.get_todo.title }}</a>이 {{ message.content }}</span>
             </div>
     {% endfor %}
 </div>

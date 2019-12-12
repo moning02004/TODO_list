@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'app_user',
     'app_todo',
     'app_main',
@@ -59,8 +60,7 @@ ROOT_URLCONF = 'todo_list.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'app_user/templates')]
-        ,
+        'DIRS': [os.path.join(BASE_DIR, 'app_user/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

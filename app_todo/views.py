@@ -16,7 +16,7 @@ def index(request):
             message = Message()
             message.box = request.user.messagebox
             message.target = str(todo.id)
-            message.content = '마감일이 지났습니다.'
+            message.content = '등록되었습니다.'
             message.save()
     return render(request, 'app_todo/index.html', {'todo_list': todo_list, 'today': today})
 
