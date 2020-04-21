@@ -1,36 +1,27 @@
-from django.contrib import auth
-from django.contrib.auth.models import User
+from django.contrib.auth.views import LoginView
 from django.http import JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views.generic import CreateView
 
-from .models import MessageBox
-
-
-def signin(request):
-    message = None
-    if request.method == "POST":
-        try:
-            user = User.objects.get(username=request.POST.get('username'))
-            if user.check_password(request.POST.get('password')):
-                auth.login(request, user)
-                return redirect('app_main:index')
-            else:
-                message = '해당 계정을 찾을 수 없습니다.'
-        except:
-            message = '해당 계정을 찾을 수 없습니다.'
-    return render(request, 'app_user/signin.html', {'message': message})
+from .forms import UserCreateForm
+from .models import User
 
 
-def signup(request):
-    if request.method == "POST":
-        user = User()
-        user.username = request.POST.get('username')
-        user.first_name = request.POST.get('firstName')
-        user.last_name = request.POST.get('lastName')
-        user.set_password(request.POST.get('password'))
-        user.save()
-        MessageBox(user=user).save()
-        return redirect('app_user:signin')
+class UserLoginView(LoginView):
+    template_name = 'app_user/auth.html'
+    extra_context = {'auth': 'login'}
+
+    def form_invalid(self, form):
+        form.error_messages['message'] = '해당 사용자를 찾을 수 없습니다.'
+        return super().form_invalid(form)
+
+
+class UserRegisterView(CreateView):
+    template_name = 'app_user/auth.html'
+    success_url = reverse_lazy('app_user:login')
+    form_class = UserCreateForm
+    extra_context = {'auth': 'signup'}
 
 
 def message(request):
@@ -40,13 +31,6 @@ def message(request):
     return render(request, 'app_user/message.html', {'message_list': message_list})
 
 
-def signout(request):
-    if request.user.is_authenticated:
-        auth.logout(request)
-    return redirect('app_main:index')
-
-
 def check(request):
     message = 'good' if not User.objects.all().filter(username=request.GET.get('username')).exists() else 'bad'
     return JsonResponse({'message': message})
-

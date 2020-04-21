@@ -9,14 +9,6 @@ $(document).ready(function() {
         $deadline.attr("min", date.getFullYear()+"-"+month+"-"+day);
     });
 
-    $('button[name="save"]').click(function(){
-        if ($('input[name="title"]').val() !== "" && $('textarea[name="content"]').val() !== ""){
-            return (confirm("저장하시겠습니까?"));
-        }
-        alert("입력 정보를 다시 한 번 확인하십시오.");
-        return false;
-    });
-
     $('.change').click(function() {
         if(!confirm("모두 완료하였습니까?")) return false;
         let $pk = $('input[name="pk"]').val();
@@ -29,7 +21,7 @@ $(document).ready(function() {
         });
     });
 
-    $('.delete-todo').click(function() {
+    $('#ajax-todo-delete').click(function() {
         if(!confirm("취소할 수 없습니다. 삭제하시겠습니까?")) return false;
         let $pk = this.value;
         $.ajax({
@@ -40,17 +32,15 @@ $(document).ready(function() {
         });
     });
 
-    $('.pri').click(function() {
+    $('#ajax-todo-edit').click(function() {
+        if(!confirm("취소할 수 없습니다. 삭제하시겠습니까?")) return false;
         let $pk = this.value;
-        let arrow = this.name;
-
         $.ajax({
-            url:'/todo/_change/'+$pk,
-            data: {'arrow': arrow},
-            dataType: 'json',
-            success: function(data){
+            url:'/todo/_delete/' + $pk,
+            success: function(data) {
                 location.reload();
             }
         });
     });
+
 });

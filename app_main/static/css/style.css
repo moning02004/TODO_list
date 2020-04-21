@@ -1,3 +1,15 @@
+.full-height {
+    height: 90vh;
+}
+.signup {
+    width: 45%;
+    left: 50%;
+    top: 10%;
+    transform: translateX(-50%);
+}
+
+
+
 #bg-red {
     background-color: rgba(221,10,10,0.3);
     color: white;

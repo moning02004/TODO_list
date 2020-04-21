@@ -1,16 +1,17 @@
 from django.urls import path
 
 from . import views
-
+from .views import *
 
 app_name = 'app_todo'
 urlpatterns = [
-    path('continue/', views.index, name='index'),
+    path('', TodoListView.as_view(), name='index'),
+    path('new', TodoCreateView.as_view(), name='new'),
+    path('<int:pk>', TodoDetail.as_view(), name='detail'),
+    path('<int:pk>/edit', TodoUpdateView.as_view(), name='edit'),
+    path('<int:pk>/complete/', views.complete_index, name='complete'),
+
     path('continue/edit/', views.index_edit, name='index_edit'),
-    path('detail/<int:pk>/', views.detail, name='detail'),
-    path('edit/<int:pk>/', views.edit, name='edit'),
-    path('new/', views.new, name='new'),
-    path('complete/', views.complete_index, name='complete'),
     path('deadline/', views.deadline_index, name='dead'),
 
     path('_change/<int:pk>/', views.changePriority),

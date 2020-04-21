@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="position-relative full-height">
+    {% if auth == 'login' %}
+        {% include 'app_user/_login.html' %}
+    {% else %}
+        <script src="{% static 'js/signup.js' %}"></script>
+        {% include 'app_user/_signup.html' %}
+    {% endif %}
+</div>
+{% endblock %}

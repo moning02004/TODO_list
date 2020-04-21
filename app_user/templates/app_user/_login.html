@@ -1,0 +1,23 @@
+<div class="position-absolute signup">
+
+    {% if form.errors %}
+    <div class="alert alert-primary text-center" role="alert">
+        {{ form.error_messages.message }}
+    </div>
+    {% endif %}
+
+    <div class="">
+        <form action="" method="post">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+                <label for="username">{{ field.label}}</label>
+                {{ field | add_class:'form-control' }}
+            </div>
+            {% endfor %}
+            <input type="submit" class="form-control cursor-pointer" value="로그인">
+        </form>
+    </div>
+    <span class="d-block mt-3 text-right">계정이 없으면 <a
+            href="{%  url 'app_main:index' %}">여기</a>를 눌러 가입을 진행하시기 바랍니다.</span>
+</div>

@@ -12,16 +12,12 @@
 
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-    <script src="{% static 'js/signup.js' %}"></script>
     <script src="{% static 'js/todo.js' %}"></script>
     <script src="{% static 'js/common.js' %}"></script>
     {% block script %}{% endblock %}
 </head>
 <body>
-    {% block top-nav %} {% endblock %}
-    {% block chat %} {% endblock %}
-    <div class="container p-3">
-        {% block content %}{% endblock %}
-    </div>
+    {% include '_top_nav.html' %}
+    {% block content %}{% endblock %}
 </body>
 </html>

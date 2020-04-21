@@ -1,11 +1,17 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-from app_todo.models import Todo
+
+class User(AbstractUser):
+    name = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.name
 
 
 class MessageBox(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
     unread = models.PositiveIntegerField(default=0)
 
     def __str__(self):
@@ -24,6 +30,3 @@ class Message(models.Model):
         self.box.unread += 1
         self.box.save()
         super(Message, self).save()
-
-    def get_todo(self):
-        return Todo.objects.get(pk=int(self.target))

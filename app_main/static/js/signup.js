@@ -35,19 +35,6 @@ $(document).ready(function() {
         })
     });
 
-    $('input[value="Sign Up"]').click(function() {
-        if ($('.user-check > i').hasClass('fa-check') &&
-            $('.password1 > i').hasClass('fa-check') &&
-            $('.password2 > i').hasClass('fa-check') &&
-            $('input[name="firstName"]').val() !== "" &&
-            $('input[name="lastName"]').val() !== ""
-        ) {
-            return confirm("입력하신 정보로 가입을 진행하시겠습니까?") ;
-        }
-        alert("입력한 정보를 확인해주십시오.");
-        return false
-    });
-
     $('input[id="password"]').keyup(function() {
         var $passwordField = $('.password1 > i');
         var $passwordField2 = $('.password2 > i');

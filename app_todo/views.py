@@ -1,24 +1,14 @@
-from django.db.models import Q
-from django.http import JsonResponse
-from django.shortcuts import render, redirect
-
-from app_user.models import MessageBox, Message
-from .models import Todo
 import datetime
 
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import JsonResponse
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+from django.views import generic
 
-def index(request):
-    today = datetime.datetime.now().strftime('%Y-%m-%d')
-    todo_list = request.user.todo_set.all().filter(isFinish='no')
-    dead_list = request.user.todo_set.all().filter(Q(isFinish='no') & Q(deadline__lt=today) and Q(deadline__isnull=False))
-    for todo in dead_list:
-        if not str(todo.id) in [y.target for y in request.user.messagebox.message_set.all().filter(target=str(todo.id))]:
-            message = Message()
-            message.box = request.user.messagebox
-            message.target = str(todo.id)
-            message.content = '등록되었습니다.'
-            message.save()
-    return render(request, 'app_todo/index.html', {'todo_list': todo_list, 'today': today})
+from app_user.models import Message
+from .forms import TodoInputForm
+from .models import Todo
 
 
 def index_edit(request):
@@ -29,18 +19,13 @@ def index_edit(request):
 
 def complete_index(request):
     todo_list = request.user.todo_set.all().filter(isFinish='Yes')
-    return render(request, 'app_todo/dead_index.html', {'todo_list': todo_list , 'headline': '완료된 목록'})
+    return render(request, 'app_todo/dead_index.html', {'todo_list': todo_list, 'headline': '완료된 목록'})
 
 
 def deadline_index(request):
     today = datetime.datetime.now().strftime('%Y-%m-%d')
     todo_list = request.user.todo_set.all().filter(isFinish='no', deadline=today)
     return render(request, 'app_todo/dead_index.html', {'todo_list': todo_list, 'headline': '오늘 마감인 목록'})
-
-
-def detail(request, pk):
-    todo = Todo.objects.get(pk=pk)
-    return render(request, 'app_todo/detail.html', {'todo': todo})
 
 
 def edit(request, pk):
@@ -55,19 +40,6 @@ def edit(request, pk):
         except:
             pass
     return render(request, 'app_todo/edit.html', {'todo': todo})
-
-
-def new(request):
-    if request.method == "POST":
-        todo = Todo()
-        todo.author = request.user
-        todo.title = request.POST.get('title')
-        todo.content = str(request.POST.get('content')).strip()
-        todo.deadline = request.POST.get('deadline') if request.POST.get('deadline') != '' else None
-        todo.priority = len(request.user.todo_set.all().filter(isFinish='no'))+1
-        todo.save()
-        return redirect('app_todo:index')
-    return render(request, 'app_todo/new.html')
 
 
 def delete(request, pk):
@@ -96,9 +68,15 @@ def changePriority(request, pk):
     todo = Todo.objects.get(pk=pk)
     try:
         if request.GET.get('arrow') == 'down':
-            next = list(request.user.todo_set.all().filter(isFinish='no', priority__gt=todo.priority).order_by('priority'))[0]
+            next = \
+                list(
+                    request.user.todo_set.all().filter(isFinish='no', priority__gt=todo.priority).order_by('priority'))[
+                    0]
         else:
-            next = list(request.user.todo_set.all().filter(isFinish='no', priority__lt=todo.priority).order_by('priority'))[-1]
+            next = \
+                list(
+                    request.user.todo_set.all().filter(isFinish='no', priority__lt=todo.priority).order_by('priority'))[
+                    -1]
         temp = todo.priority
         todo.priority = next.priority
         next.priority = temp
@@ -108,3 +86,44 @@ def changePriority(request, pk):
         pass
     return JsonResponse({'message': 'OK'})
 
+
+class TodoListView(LoginRequiredMixin, generic.ListView):
+    queryset = Todo.objects.all()
+    template_name = 'app_todo/index.html'
+    context_object_name = 'todo_list'
+
+
+class TodoCreateView(LoginRequiredMixin, generic.CreateView):
+    login_url = reverse_lazy('app_user:login')
+    template_name = 'app_todo/new.html'
+    form_class = TodoInputForm
+    success_url = reverse_lazy('app_todo:index')
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super(TodoCreateView, self).form_valid(form)
+
+
+class TodoDetail(LoginRequiredMixin, generic.TemplateView):
+    def get(self, request, *args, **kwargs):
+        view = TodoDetailView.as_view()
+        return view(request, *args, **kwargs)
+
+
+class TodoDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Todo
+    template_name = 'app_todo/detail.html'
+    context_object_name = 'todo'
+
+
+class TodoUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Todo
+    template_name = 'app_todo/edit.html'
+    context_object_name = 'todo'
+    form_class = TodoInputForm
+    success_url = reverse_lazy('app_todo:index')
+
+
+class TodoDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Todo
+    success_url = reverse_lazy('app_todo:index')

@@ -1,5 +1,11 @@
 # TODO_list
 
+### 2020. 04. 21
+> 함수 기반에서 클래스 기반으로 변경 중에 있음.
+> (2020. 04. 21) 현재 회원 가입, 로그인, Todo 리스트, 작성, 수정 완료 (UI 수정 필요)
+
+
+
 # 설치 요소 (pip3, django, uWSGI)
 1. sudo apt-get update
 2. sudo apt-get install git

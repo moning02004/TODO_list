@@ -1,4 +1,4 @@
-{% extends 'layout.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block script %}
@@ -9,34 +9,7 @@
     <span class="d-block h2 my-3">Todo List : {{ todo.title }} 수정하기</span>
     <form action="" method="post">
         {% csrf_token %}
-        <div class="border rounded p-3 mb-2">
-            <div class="input-group form-group">
-                <div class="input-group-prepend">
-                    <label for="title" class="input-group-text">제목 *</label>
-                </div>
-                <input id="title" type="text" class="form-control" name="title" value="{{ todo.title }}">
-            </div>
-
-            <div class="input-group form-group">
-                <div class="input-group-prepend">
-                    <label for="content" class="input-group-text">내용 *</label>
-                </div>
-                <textarea id="content" class="form-control" name="content">{{ todo.content }}</textarea>
-            </div>
-
-            <div class="accordion">
-                <input type="button" class="form-control cursor-pointer" data-toggle="collapse" data-target="#deadline-field" value="옵션" readonly>
-
-                <div class="collapse" id="deadline-field">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <label for="deadline" class="input-group-text">마감</label>
-                        </div>
-                        <input id="deadline" type="date" class="form-control" name="deadline">
-                    </div>
-                </div>
-            </div>
-        </div>
+        {{ form.as_p }}
         <button type="submit" class="mb-2 form-control bg-light pointer-cursor">작성</button>
         <a href="{% url 'app_main:index' %}" class="form-control text-center link">취소</a>
     </form>
