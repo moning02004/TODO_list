@@ -11,6 +11,7 @@ from .models import User
 class UserLoginView(LoginView):
     template_name = 'app_user/auth.html'
     extra_context = {'auth': 'login'}
+    success_url = reverse_lazy('app_main:index')
 
     def form_invalid(self, form):
         form.error_messages['message'] = '해당 사용자를 찾을 수 없습니다.'
@@ -18,10 +19,10 @@ class UserLoginView(LoginView):
 
 
 class UserRegisterView(CreateView):
-    template_name = 'app_user/auth.html'
-    success_url = reverse_lazy('app_user:login')
     form_class = UserCreateForm
+    template_name = 'app_user/auth.html'
     extra_context = {'auth': 'signup'}
+    success_url = reverse_lazy('app_user:login')
 
 
 def message(request):

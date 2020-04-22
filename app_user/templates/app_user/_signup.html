@@ -6,6 +6,9 @@
             <div class="form-group">
                 <label>{{ field.label }}</label>
                 {{ field|add_class:'form-control' }}
+                {% for error in field.errors %}
+                <small class="text-danger">{{ error }}</small>
+                {% endfor %}
             </div>
         {% endfor %}
         <div class="d-flex">

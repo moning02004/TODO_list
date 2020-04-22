@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import generic
 
+from app_main.permissions import IsOwnerMixin
 from app_user.models import Message
 from .forms import TodoInputForm
 from .models import Todo
@@ -88,9 +89,12 @@ def changePriority(request, pk):
 
 
 class TodoListView(LoginRequiredMixin, generic.ListView):
-    queryset = Todo.objects.all()
     template_name = 'app_todo/index.html'
     context_object_name = 'todo_list'
+
+    def get_queryset(self):
+        todo_list = self.request.user.todo_set.all()
+        return todo_list
 
 
 class TodoCreateView(LoginRequiredMixin, generic.CreateView):
@@ -104,19 +108,13 @@ class TodoCreateView(LoginRequiredMixin, generic.CreateView):
         return super(TodoCreateView, self).form_valid(form)
 
 
-class TodoDetail(LoginRequiredMixin, generic.TemplateView):
-    def get(self, request, *args, **kwargs):
-        view = TodoDetailView.as_view()
-        return view(request, *args, **kwargs)
-
-
 class TodoDetailView(LoginRequiredMixin, generic.DetailView):
     model = Todo
     template_name = 'app_todo/detail.html'
     context_object_name = 'todo'
 
 
-class TodoUpdateView(LoginRequiredMixin, generic.UpdateView):
+class TodoUpdateView(IsOwnerMixin, generic.UpdateView):
     model = Todo
     template_name = 'app_todo/edit.html'
     context_object_name = 'todo'
@@ -124,6 +122,6 @@ class TodoUpdateView(LoginRequiredMixin, generic.UpdateView):
     success_url = reverse_lazy('app_todo:index')
 
 
-class TodoDeleteView(LoginRequiredMixin, generic.DeleteView):
+class TodoDeleteView(IsOwnerMixin, generic.DeleteView):
     model = Todo
     success_url = reverse_lazy('app_todo:index')
