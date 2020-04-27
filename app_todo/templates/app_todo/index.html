@@ -1,28 +1,31 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="d-flex">
-        <span class="d-block h2 my-3">진행 중인 목록</span>
-        {% if todo_list %}
-            <a href="{% url 'app_todo:index_edit' %}" class="btn ml-auto my-auto bg-light">수정</a>
-        {% endif %}
-    </div>
-    {% if not todo_list %}
-        <p>작성된 리스트가 없습니다.</p>
-    {% endif %}
-    <div id="todo-field">
-        {% for todo in todo_list|dictsort:'priority' %}
-            <div class="input-group form-group">
-                {% if todo.deadline != None and today > todo.deadline|date:'Y.m.d' %}
-                    <span class="input-group-text" id="bg-red">{{ todo.priority }}</span>
-                {% else %}
-                    <span class="input-group-text">{{ todo.priority }}</span>
-                {% endif %}
-                <a href="{% url 'app_todo:detail' todo.id %}" class="form-control d-flex link">
-                    <span>{{ todo.title }}</span>
-                    <span class="ml-auto">{{ todo.deadline|date:'Y년 m월 d일까지' }}</span>
-                </a>
+<div class="position-relative full-screen">
+    <div class="position-absolute w-60 py-1" style="left: 50%; top: 1rem; transform: translateX(-50%);">
+
+        <div class="position-relative">
+            <div class="position-absolute">
+                <button class="btn type-filter">전체</button>
+                <button class="btn type-filter">진행</button>
+                <button class="btn type-filter">완료</button>
+                <button class="btn type-filter">오늘</button>
             </div>
-        {% endfor %}
+            <div class="position-absolute other-func" style="right:0;">
+                <button class="btn w-prior"><i class="fa fa-ellipsis-v"></i></button>
+                <div class="drop p-0 m-0" style="right:0;">
+                    <a href="{% url 'app_todo:new' %}" class="btn drop-item">작성</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="pt-5">
+            {% if not todo_list %}<p>작성된 리스트가 없습니다.</p>
+            {% else %}
+                {% include 'app_todo/_all_list.html' with list=todo_list %}
+            {% endif %}
+        </div>
+
     </div>
+</div>
 {% endblock %}

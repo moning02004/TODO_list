@@ -1,43 +1,36 @@
 {% extends 'base.html' %}
-{% load static %}
-
-{% block script %}
-    <script src="{% static 'js/new.js' %}"></script>
-{% endblock %}
 
 {% block content %}
-    <span class="d-block h2 my-3">Todo List 작성하기</span>
-    <form action="" method="post">
-        {% csrf_token %}
-        <div class="border rounded p-3 mb-2">
-            <div class="input-group form-group">
-                <div class="input-group-prepend">
-                    <label for="title" class="input-group-text">제목 *</label>
-                </div>
-                <input id="title" type="text" class="form-control" name="title" placeholder="제목을 입력하세요">
-            </div>
+<div class="position-relative full-screen">
+    <div class="position-absolute w-75 py-3" style="left: 50%; top: 1.5rem; transform: translateX(-50%);">
 
-            <div class="input-group form-group">
-                <div class="input-group-prepend">
-                    <label for="content" class="input-group-text">내용 *</label>
-                </div>
-                <textarea id="content" class="form-control" name="content" placeholder="내용을 입력하세요"></textarea>
-            </div>
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="border rounded p-3 mb-2">
+                {% for field in form %}
+                    <div class="form-group">
+                            <div>{{ field.label }} {% for error in field.errors %}{{ error }} Format: {{ field.help_text }} {% endfor %}</div>
 
-            <div class="accordion">
-                <input type="button" class="form-control cursor-pointer" data-toggle="collapse" data-target="#deadline-field" value="옵션" readonly>
-                <div class="collapse" id="deadline-field">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <label for="deadline" class="input-group-text">마감일</label>
+                            {% if field.label == '중요' %}
+                                <div class="">
+                                {% for x in field %}
+                                    {{ x.tag }}
+                                    <label for="{{ x.id_for_label }}" class="btn border py-3 w-prior prior-{{ x.choice_label }} prior"></label>
+                                {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ field|add_class:'form-control' }}
+                            {% endif %}
                         </div>
-                        <input id="deadline" type="date" class="form-control" name="deadline">
-                    </div>
-                </div>
+                {% endfor %}
             </div>
-        </div>
+            <button type="submit" name="save" class="mb-2 form-control bg-light pointer-cursor">작성</button>
+            <a href="{% url 'app_main:index' %}" class="form-control text-center">취소</a>
+        </form>
+    </div>
+</div>
 
-        <button type="submit" name="save" class="mb-2 form-control bg-light pointer-cursor">작성</button>
-        <a href="{% url 'app_main:index' %}" class="form-control text-center" id="bg-red">취소</a>
-    </form>
+    {% load static %}
+    <script src="{% static 'js/new.js' %}"></script>
+
 {% endblock %}

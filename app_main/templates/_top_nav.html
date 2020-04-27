@@ -1,7 +1,6 @@
 <nav class="navbar navbar-expand-lg border-bottom bg-dark">
+    <a class="nav-link text-white" href="{% url 'app_todo:index' %}">홈</a>
     {% if user.is_authenticated %}
-    <a class="nav-link text-white" href="{% url 'app_todo:new' %}">Todo List 작성</a>
-    <a class="nav-link text-white" href="{% url 'app_todo:index' %}">진행 중인 목록</a>
 
     <a class="nav-link text-white ml-auto border rounded mx-1" href="{% url 'app_user:message' user.id %}">
         {% if user.messagebox.unread != 0 %}
@@ -10,7 +9,7 @@
         <i class="fa fa-envelope"></i>
         {% endif %}
     </a>
-    <div class="dropdown" style="border-radius: 4px;">
+    <div class="dropdown radius">
         <button class="py-auto btn btn-outline-secondary dropdown-toggle" role="button" data-toggle="dropdown">
             <span class="text-white"><i class="fa fa-user"></i> {{ user.name }}</span>
         </button>
@@ -19,7 +18,6 @@
         </div>
     </div>
     {% else %}
-    <a class="nav-link text-white" href="{% url 'app_main:index' %}">Todo</a>
     <a class="nav-link text-white ml-auto" href="{% url 'app_user:login' %}">로그인</a>
     {% endif %}
 </nav>

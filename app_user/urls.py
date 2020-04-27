@@ -9,6 +9,6 @@ urlpatterns = [
     path('signup', views.UserRegisterView.as_view(), name='signup'),
     path('<int:pk>/notice', views.message, name='message'),
 
-    path('logout/', LogoutView.as_view(next_page=reverse_lazy('app_main:index')), name='logout'),
+    path('logout/', LogoutView.as_view(next_page=reverse_lazy('app_user:login')), name='logout'),
     path('_check/', views.check),
 ]

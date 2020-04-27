@@ -1,16 +1,36 @@
 {% extends 'base.html' %}
-{% load static %}
-
-{% block script %}
-    <script src="{% static 'js/signup.js' %}"></script>
-{% endblock %}
 
 {% block content %}
-    <span class="d-block h2 my-3">Todo List : {{ todo.title }} 수정하기</span>
-    <form action="" method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="mb-2 form-control bg-light pointer-cursor">작성</button>
-        <a href="{% url 'app_main:index' %}" class="form-control text-center link">취소</a>
-    </form>
+<div class="position-relative full-screen">
+    <div class="position-absolute w-75 py-3" style="left: 50%; top: 1.5rem; transform: translateX(-50%);">
+
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="border rounded p-3 mb-2">
+                {% for field in form %}
+                    <div class="form-group">
+                            <div>{{ field.label }} {% for error in field.errors %}{{ error }} Format: {{ field.help_text }} {% endfor %}</div>
+
+                            {% if field.label == '중요' %}
+                                <div class="">
+                                {% for x in field %}
+                                    {{ x.tag }}
+                                    <label for="{{ x.id_for_label }}" class="btn border py-3 w-prior prior-{{ x.choice_label }} prior"></label>
+                                {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ field|add_class:'form-control' }}
+                            {% endif %}
+                        </div>
+                {% endfor %}
+            </div>
+            <button type="submit" name="save" class="mb-2 form-control bg-light pointer-cursor">작성</button>
+            <a href="{% url 'app_main:index' %}" class="form-control text-center">취소</a>
+        </form>
+    </div>
+</div>
+
+{% load static %}
+<script src="{% static 'js/new.js' %}"></script>
+
 {% endblock %}

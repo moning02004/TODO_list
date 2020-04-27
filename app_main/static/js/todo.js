@@ -25,22 +25,33 @@ $(document).ready(function() {
         if(!confirm("취소할 수 없습니다. 삭제하시겠습니까?")) return false;
         let $pk = this.value;
         $.ajax({
-            url:'/todo/_delete/' + $pk,
+            url:'/todo/' + $pk + '/delete',
+            method: 'post',
             success: function(data) {
-                location.reload();
+                history.go(-1);
             }
         });
     });
 
-    $('#ajax-todo-edit').click(function() {
-        if(!confirm("취소할 수 없습니다. 삭제하시겠습니까?")) return false;
-        let $pk = this.value;
-        $.ajax({
-            url:'/todo/_delete/' + $pk,
-            success: function(data) {
-                location.reload();
-            }
-        });
+    $('.other-func').click( function(e) {
+        $('.drop').toggleClass('show');
     });
 
+    $('.type-filter').click( function (e) {
+        let type = 'all';
+        switch ($(this).text()) {
+            case "진행":
+                type = 'progress'
+                break;
+            case "완료":
+                type = 'complete'
+                break;
+            case "오늘":
+                type = 'today'
+                break;
+            default:
+                type = 'all'
+        }
+        location.href = '/todo?type=' + type
+    });
 });
